@@ -5,7 +5,7 @@ const taskSlice = createSlice({
   initialState: { task: null },
   reducers: {
     setTaskState(state, action) {
-      state.notification = action.payload;
+      state.task = action.payload;
     },
     clearTaskState(state) {
       state.task = null;
@@ -16,11 +16,9 @@ const taskSlice = createSlice({
 export const { setTaskState, clearTaskState } = taskSlice.actions;
   
 
-export const setTask = (content) => {
+export const createTask = (content) => {
   return async (dispatch) => {
     dispatch(setTaskState(content));
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    dispatch(clearTaskState());
   };
 };
 
