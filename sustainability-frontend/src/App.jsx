@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Togglable from './components/Togglable';
 import TaskForm from './components/task';
 import { createTask } from './taskReducer';
+import HomePage from './components/homepage';
 
 const App=()=> {
 
@@ -47,7 +48,8 @@ const App=()=> {
 
   return (
     <div>
-      <h1>MOI</h1>
+      <h1>Welcome to the Sustainable-tutor</h1>
+      <HomePage />
       <Routes> 
         
         <Route path="/" element={TaskList()} /> 
