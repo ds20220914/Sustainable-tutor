@@ -46,6 +46,36 @@ const TaskForm = ({ addTask, handleTaskChange, newTasks }) => (
 				<option value="Creating">Creating</option>
   			</select>
 		</div>
+
+		<div style={{ display: 'flex', alignItems: 'center' }}>
+			<label style={{ width: '150px' }}>Preferred exercise type:</label>
+			<select
+    			value={newTasks.preferred}
+    			name="preferred"
+    			onChange={handleTaskChange}
+    			data-testid="preferred"
+  			>
+    			<option value="">-- Select type --</option>
+				<option value="multiple_choice">Multiple-choice questions</option>
+				<option value="short_answer">Short-answer questions</option>
+				<option value="summarization">Summarization tasks</option>
+				<option value="practice_test">Practice tests</option>
+  			</select>
+		</div>
+
+		<div style={{ display: 'flex', alignItems: 'center' }}>
+			<label style={{ width: '150px' }}>Number of exercises:</label>
+			<input
+				type="number"
+				min="1"
+				max="50"
+				value={newTasks.count}
+				name="count"
+				onChange={handleTaskChange}
+				placeholder="e.g., 5"
+				data-testid="count"
+			/>
+		</div>
 		<div style={{ display: 'flex', alignItems: 'center' }}>
 			<label style={{ width: '150px' }}>Description:</label>
 			<input
@@ -57,7 +87,7 @@ const TaskForm = ({ addTask, handleTaskChange, newTasks }) => (
 				data-testid="description"
 			/>
 		</div>
-		<button type="submit" style={{ width: '100px', alignSelf: 'flex-start', marginTop: '8px' }}>create</button>
+		<button type="submit" style={{ width: '140px', alignSelf: 'flex-start', marginTop: '8px' }}>Generate</button>
 	</form>
 )
 export default TaskForm

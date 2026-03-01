@@ -3,13 +3,14 @@ import { Routes, Route, } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Togglable from './components/Togglable';
 import TaskForm from './components/task';
-import { createTask } from './taskReducer';
+import { createTask, generateMaterials } from './taskReducer';
 import HomePage from './components/homepage';
 
 const App=()=> {
 
-  const [newTasks, setNewTasks] = useState({ topic:"", currentlevel:"", targetlevel:"", description:""});
+  const [newTasks, setNewTasks] = useState({ topic:"", currentlevel:"", targetlevel:"", description:"", preferred:"", count:5});
   const allTask = useSelector((state) => state.task.task);
+  const generated = useSelector((state) => state.task.generated);
   const dispatch = useDispatch();
 
   const addTask = async (event) => {
@@ -17,14 +18,22 @@ const App=()=> {
     
       const taskObject = {
         name: newTasks.topic,
-        currentlevel: newTasks.level,
+        currentlevel: newTasks.currentlevel,
         targetlevel: newTasks.targetlevel,
         description: newTasks.description,
       };
 
       dispatch(createTask(taskObject));
+      dispatch(generateMaterials({
+        topic: newTasks.topic,
+        currentlevel: newTasks.currentlevel,
+        targetlevel: newTasks.targetlevel,
+        preferred: newTasks.preferred || 'multiple_choice',
+        count: Number(newTasks.count) || 5,
+        description: newTasks.description,
+      }));
       
-      setNewTasks({ topic: "", currentlevel: "", targetlevel: "", description: "" });
+      setNewTasks({ topic: "", currentlevel: "", targetlevel: "", description: "", preferred:"", count:5 });
       console.log(newTasks);
     } 
   ;
@@ -56,6 +65,27 @@ const App=()=> {
       
       </Routes>
       <h2>{allTask ? allTask.name : "No tasks available"}</h2>
+      {generated && (
+        <div style={{ marginTop: '16px' }}>
+          <h3>Generated Materials ({generated.preferred})</h3>
+          <ul>
+            {generated.items.map((it, idx) => (
+              <li key={idx} style={{ marginBottom: '8px' }}>
+                <div><strong>Q{idx+1}:</strong> {it.question}</div>
+                {it.answer && (<div><em>Answer:</em> {it.answer}</div>)}
+              </li>
+            ))}
+          </ul>
+          <button onClick={() => dispatch(generateMaterials({
+            topic: allTask ? allTask.name : newTasks.topic,
+            currentlevel: newTasks.currentlevel || 'Remembering',
+            targetlevel: newTasks.targetlevel || 'Understanding',
+            preferred: newTasks.preferred || 'multiple_choice',
+            count: Number(newTasks.count) || 5,
+            description: newTasks.description,
+          }))}>Regenerate</button>
+        </div>
+      )}
     </div>
   )
 }
