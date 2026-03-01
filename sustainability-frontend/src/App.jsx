@@ -7,27 +7,26 @@ import { createTask } from './taskReducer';
 
 const App=()=> {
 
-  const [newTasks, setNewTasks] = useState({ name:"", level:"", description:""});
+  const [newTasks, setNewTasks] = useState({ topic:"", currentlevel:"", targetlevel:"", description:""});
   const allTask = useSelector((state) => state.task.task);
   const dispatch = useDispatch();
 
   const addTask = async (event) => {
     event.preventDefault();
-
-    try {
+    
       const taskObject = {
-        name: newTasks.name,
-        level: newTasks.level,
+        name: newTasks.topic,
+        currentlevel: newTasks.level,
+        targetlevel: newTasks.targetlevel,
         description: newTasks.description,
       };
 
       dispatch(createTask(taskObject));
-      note(`A new task "${taskObject.name}" added`);
-      setNewTasks({ name: '', level: '', description: '' });
-    } catch (error) {
-      note('error adding task');
-    }
-  };
+      
+      setNewTasks({ topic: "", currentlevel: "", targetlevel: "", description: "" });
+      console.log(newTasks);
+    } 
+  ;
 
   const handleTaskChange = (event) => {
     setNewTasks({ ...newTasks, [event.target.name]: event.target.value });
@@ -38,12 +37,11 @@ const App=()=> {
       <Togglable buttonLabel="new Task">
         <TaskForm
           addTask={addTask}
-          newTask={newTasks}
+          newTasks={newTasks}
           handleTaskChange={handleTaskChange}
         />
       </Togglable>
 
-      <h2>{allTask ? allTask.name : "No tasks available"}</h2>
     </div>
   );
 
@@ -55,6 +53,7 @@ const App=()=> {
         <Route path="/" element={TaskList()} /> 
       
       </Routes>
+      <h2>{allTask ? allTask.name : "No tasks available"}</h2>
     </div>
   )
 }
